@@ -9,7 +9,7 @@ class Album extends Component {
     const album = albumData.find( album => {
       return album.slug === this.props.match.params.slug
     });
-
+    console.log(album);
     this.state = {
       album: album,
       currentSong: album.songs[0],
@@ -67,9 +67,7 @@ class Album extends Component {
               this.state.album.songs.map( (song, index) =>
                 <tr className="song" key={index} onClick={() => this.handleSongClick(song)} >
                   <td>
-                    <Link to={`/album/${song.slug}`}>
                       {index + 1} {song.title} {song.duration}
-                    </Link>
                   </td>
                 </tr>
               )
