@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import albumData from './../data/albums';
 
 class Album extends Component {
@@ -9,11 +8,12 @@ class Album extends Component {
     const album = albumData.find( album => {
       return album.slug === this.props.match.params.slug
     });
-    console.log(album);
+
     this.state = {
       album: album,
-      currentSong: album.songs[0],
-      isPlaying: false
+      currentSong: null,
+      isPlaying: false,
+      isMouseInside : false
     };
 
     this.audioElement = document.createElement('audio');
@@ -35,13 +35,78 @@ class Album extends Component {
     this.setState({ currentSong: song });
   }
 
-  handleSongClick(song) {
+  handleSongClick(song, index) {
     const isSameSong = this.state.currentSong === song;
     if (this.state.isPlaying && isSameSong) {
       this.pause();
-    } else {
-      if (!isSameSong) {this.setSong(song); }
+      this.setIcon("ion-md-play", index);
+    }
+    else {
+      if (!isSameSong) {
+        this.setIcon("remove-classes", index);
+        this.setSong(song);
+      }
       this.play();
+      this.setIcon("ion-md-pause", index);
+    }
+  }
+
+  setIcon(className, index) {
+    const spanTag = document.getElementById(`span-${index}`);
+    spanTag.innerText = "";
+    switch(className) {
+      case "ion-md-pause" :
+        spanTag.classList.remove("ion-md-play");
+        spanTag.className += " ion-md-pause";
+        console.log("pauseeee");
+        break;
+      case "ion-md-play" :
+        spanTag.classList.remove("ion-md-pause");
+        spanTag.className += " ion-md-play";
+        break;
+      case "remove-classes" :
+        this.state.album.songs.map((key, index) => {
+          const spanTag2 = document.getElementById(`span-${index}`);
+          spanTag2.classList.remove("ion-md-pause");
+          spanTag2.innerText = index + 1;
+        })
+        break;
+      default :
+        this.state.album.songs.map((key, index) => {
+          const spanTag2 = document.getElementById(`span-${index}`);
+          const getCurrentSong = this.state.album.songs[index];
+          if (this.state.currentSong !== getCurrentSong) {
+            spanTag2.classList.remove("ion-md-pause", "ion-md-play");
+            spanTag2.innerText = index +1;
+          }
+          else if (!this.state.isPlaying){
+            spanTag2.classList.remove("ion-md-play", "ion-md-pause");
+            spanTag2.innerText = index + 1;
+          }
+      })
+    }
+  }
+
+  mouseEnter = (index) => {
+    const isSameSong = this.state.currentSong === this.state.album.songs[index];
+    this.setState({ isMouseInside: true });
+    if (this.state.isPlaying && isSameSong) {
+      this.setIcon("ion-md-pause", index);
+    }
+    else {
+      this.setIcon("ion-md-play", index);
+
+    }
+  }
+
+  mouseLeave = (index) => {
+    const isSameSong = this.state.currentSong === this.state.album.songs[index];
+    this.setState({ isMouseInside: false});
+    if (this.state.isPlaying && isSameSong) {
+      this.setIcon("ion-md-pause", index);
+    }
+    else {
+      this.setIcon("", index);
     }
   }
 
@@ -65,10 +130,12 @@ class Album extends Component {
           <tbody>
             {
               this.state.album.songs.map( (song, index) =>
-                <tr className="song" key={index} onClick={() => this.handleSongClick(song)} >
-                  <td>
-                      {index + 1} {song.title} {song.duration}
+                <tr className="song" key={index} id={`td-${index}`} onClick={() => this.handleSongClick(song, index)} >
+                  <td onMouseEnter= {() => this.mouseEnter(index)} onMouseLeave={() => this.mouseLeave(index)}>
+                    <span id={`span-${index}`} className="song-number">{index + 1}</span>
                   </td>
+                  <td className="song-title">{song.title}</td>
+                  <td className="song-duration">{song.duration}</td>
                 </tr>
               )
             }
