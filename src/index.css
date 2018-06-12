@@ -1,5 +1,74 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: sans-serif;
+  font-family: monospace;
+  font-size: 20px;
+}
+
+.hero-title {
+  background-color: transparent;;
+  padding: 10px;
+  margin: 10px;
+  font-family: monospace;
+  color: red;
+  font-weight: lighter;
+}
+
+.landing {
+  width: 960px;
+  margin: 0 auto;
+  background-image: url(https://amazingpict.com/wp-content/uploads/2015/12/simple-music-music.jpg);
+  height: 100%;
+  background-position: center;
+  background-size: cover;
+}
+
+.point1, .point2, .point3{
+  background-color: transparent;;
+  width: 300px;
+  float: left;
+  margin: 10px;
+  font-family: monospace;
+}
+ p{
+   font-family: monospace;
+ }
+
+.library img {
+  width: 230px;
+  height: 230px;
+  padding: 10px;
+
+}
+
+.library {
+    text-align: center;
+    height: 200px;
+    width:200px;
+    margin-left: auto;
+    margin-right: auto;
+
+}
+
+div {
+  color: black;
+}
+
+#nav {
+  padding: 10px;
+  margin: 10px;
+  color: black;
+}
+
+nav a {
+  padding: 5px;
+}
+
+.player-bar {
+  background-color: white;
+}
+
+table {
+  margin-left: auto;
+  margin-right: auto;
 }
